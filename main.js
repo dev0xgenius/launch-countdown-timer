@@ -4,16 +4,20 @@ const minInMillisec = 60000;
 const secInMillisec = 1000;
 
 let Time = {
-  day: 13,
-  hour: 22,
-  min: 34,
-  sec: 23
+  day: 14,
+  hour: 0,
+  min: 0,
+  sec: 0
 };
 
 class Timer {
   constructor(time, name="Timer") {
     this.time = Object.assign({}, time);
     this.name = name;
+    
+    this.startDate = null;
+    this.targetDate = null;
+    this.active = false;
   }
 
   getTime(unit = "full") {
@@ -27,16 +31,15 @@ class Timer {
   }
 
   countdown() {
-    setInterval(() => {
+    this.active = true;
+    
+    let T = setInterval(() => {
       this.time.set(this.time.toMilliseconds() - 1000);
       updateTimerUI(this);
+      
+      if (Time.toMilliseconds() == 0) clearInterval(T);
     }, 1000);
   }
-}
-
-function animateFlip(target) {
-  let flipElement = target.querySelector("flip");
-  
 }
 
 function updateTimerUI(timer) {
@@ -47,11 +50,17 @@ function updateTimerUI(timer) {
       let unitValue = timer.getTime(unit).toString();
       unitValue = (unitValue.length < 2) ?
         ("0" + unitValue) : unitValue;
-
+      
       let target = document.querySelector(".time-value." + unit);
       target.innerHTML = "<span class='flip'></span>" + unitValue;
-      animateFlip(target);
+      
+      target = target.querySelector(".flip");
+      if (parseInt(unitValue) != Time[unit])
+        target.style.animationName ="flip";
+      else target.style.animationName = "";
     }
+    
+    Object.assign(Time, timer.time);
   }
 }
 
@@ -109,8 +118,6 @@ function main() {
   if (timerSet()) {
     targetDate = new Date(localStorage.getItem("time"));
     Time.set(targetDate.getTime() - Date.now());
-    
-    console.log(Time);
     timer = new Timer(Time);
   } else {
     timer = new Timer(Time, "Random");
@@ -118,6 +125,8 @@ function main() {
     localStorage.setItem("time", targetDate.toString());
   }
   
+  updateTimerUI(timer);
+  Object.assign(Time, timer.time); // Sync Global Time object with timer;
   timer.countdown();
 }
 

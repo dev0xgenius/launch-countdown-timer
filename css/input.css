@@ -48,9 +48,13 @@ body {
    }
    
    .flip {
-     @apply block absolute w-full top-0 opacity-50;
-     box-shadow: 0px 1px 1px black;
-     height: 50%;
+    @apply block absolute rounded w-full top-0 opacity-30;
+    box-shadow: 0px 1px 1px black;
+    height: 50%;
+    
+    transform-origin: bottom left;
+    animation-duration: .3s;
+    animation-timing-function: ease-out;
    }
    
    .time-value:before,
@@ -68,6 +72,7 @@ body {
      left: -1%; 
      border-radius: 0px 8px 8px 0px;
    }
+   
    .time-value:after { 
      right: -1%; 
      border-radius: 8px 0px 0px 8px;
@@ -81,5 +86,22 @@ body {
    
    .icon-social:hover {
      fill: hsl(345, 95%, 70%);
+   }
+   
+   @keyframes flip {
+     0% { 
+      transform: rotate(0deg);
+      background-color: hsla(0,0%,0%,1);
+     }
+     
+     100% {
+      transform: rotateX(180deg);
+      border: 4px solid black;
+      background-color: hsla(236, 21%, 26%, 1);
+     }
+   }
+   
+   .flip.active {
+    
    }
 }

@@ -32,7 +32,6 @@ class Timer {
 
   countdown() {
     this.active = true;
-    
     let T = setInterval(() => {
       this.time.set(this.time.toMilliseconds() - 1000);
       updateTimerUI(this);
@@ -55,7 +54,7 @@ function updateTimerUI(timer) {
       target.innerHTML = "<span class='flip'></span>" + unitValue;
       
       target = target.querySelector(".flip");
-      if (parseInt(unitValue) != Time[unit])
+      if (parseInt(unitValue) != Time[unit]) // If time unit changes
         target.style.animationName ="flip";
       else target.style.animationName = "";
     }
@@ -126,7 +125,6 @@ function main() {
   }
   
   updateTimerUI(timer);
-  Object.assign(Time, timer.time); // Sync Global Time object with timer;
   timer.countdown();
 }
 
